@@ -1,0 +1,45 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+New Page Entry
+{% endblock %}
+
+{% block body %}
+{% if edit %}
+<h1>Editing {{ title }}</h1>
+{% else %}
+<h1>Create Your New Page:</h1>
+
+{% endif %}
+
+{% if edit %}
+<form action="{% url 'edit_submit' title %}" method="POST">
+    {{EditFromDisplay.as_p}}
+    {% csrf_token %}
+    <br>
+    <button  class="btn btn-secondary" type="submit">Submit</button>
+</form>
+
+{% elif exist %}
+<div class="alert alert-danger" role="alert">
+    A page with the same title already exists. Click here if you want to make changed to it: <a href="/wiki/{{ entry }}" class="alert-link">Change</a>
+</div>
+<div class="alert alert-info" role="alert">
+    Or you can also change the title to proceed with your desired page.
+</div>
+
+
+{% elif new %}
+<br>
+<div class="form-group">
+    <form action ="{% url 'newpage' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit">
+    </form>
+</div>
+
+{% endif %}
+
+
+{% endblock %}
